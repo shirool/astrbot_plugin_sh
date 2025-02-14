@@ -1,18 +1,48 @@
-from astrbot.api.event import filter, AstrMessageEvent, MessageEventResult
+import logging
+import urllib.request
 from astrbot.api.star import Context, Star, register
-from astrbot.api import logger
+from astrbot.api.event import filter, AstrMessageEvent, MessageEventResult
+from astrbot.api.event.filter import event_message_type, EventMessageType
 
-@register("helloworld", "Your Name", "一个简单的 Hello World 插件", "1.0.0", "repo url")
-class MyPlugin(Star):
+# 获取当前模块 logger
+logger = logging.getLogger(__name__)
+
+@register("cr4zythursday", "w33d", "一个疯狂星期四插件", "1.0", "https://github.com/Last-emo-boy/astrbot_plugin_cr4zyThursday")
+class CrazyThursdayPlugin(Star):
     def __init__(self, context: Context):
         super().__init__(context)
-    
-    # 注册指令的装饰器。指令名为 helloworld。注册成功后，发送 `/helloworld` 就会触发这个指令，并回复 `你好, {user_name}!`
-    @filter.command("helloworld")
-    async def helloworld(self, event: AstrMessageEvent):
-        '''这是一个 hello world 指令''' # 这是 handler 的描述，将会被解析方便用户了解插件内容。建议填写。
-        user_name = event.get_sender_name()
-        message_str = event.message_str # 用户发的纯文本消息字符串
-        message_chain = event.get_messages() # 用户所发的消息的消息链 # from astrbot.api.message_components import *
-        logger.info(message_chain)
-        yield event.plain_result(f"Hello, {user_name}, 你发了 {message_str}!") # 发送一条纯文本消息
+
+    @event_message_type(EventMessageType.ALL)
+    async def on_message(self, event: AstrMessageEvent) -> MessageEventResult:
+        """
+        当消息中包含 "ame" 时回复 "a醋"
+        """
+        msg_obj = event.message_obj
+
+        text = msg_obj.message_str or ""
+
+        logger.debug("=== Debug: AstrBotMessage ===")
+        logger.debug("Bot ID: %s", msg_obj.self_id)
+        logger.debug("Session ID: %s", msg_obj.session_id)
+        logger.debug("Message ID: %s", msg_obj.message_id)
+        logger.debug("Sender: %s", msg_obj.sender)
+        logger.debug("Group ID: %s", msg_obj.group_id)
+        logger.debug("Message Chain: %s", msg_obj.message)
+        logger.debug("Raw Message: %s", msg_obj.raw_message)
+        logger.debug("Timestamp: %s", msg_obj.timestamp)
+        logger.debug("============================")
+
+        if "ame" in text.lower():  # 改为检测 ame（不区分大小写）
+            # 直接返回固定响应
+            return event.plain_result("a醋")
+
+        # 保留原有疯狂星期四逻辑（如需完全替换可删除此部分）
+        if "疯狂星期四" in text:
+            try:
+                with urllib.request.urlopen("https://vme.im/api?format=text") as resp:
+                    result_bytes = resp.read()
+                    result_text = result_bytes.decode("utf-8", errors="replace")
+            except Exception as e:
+                result_text = f"获取信息失败: {e}"
+
+            yield event.plain_result(result_text)
