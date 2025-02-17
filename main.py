@@ -7,7 +7,7 @@ from astrbot.api.event.filter import event_message_type, EventMessageType
 # 获取当前模块 logger
 logger = logging.getLogger(__name__)
 
-@register("cr4zythursday", "w33d", "一个疯狂星期四插件", "1.0", "https://github.com/Last-emo-boy/astrbot_plugin_cr4zyThursday")
+@register("ame", "shirool", "回复a醋", "1.0", "https://github.com/shirool/astrbot_plugin_sh")
 class CrazyThursdayPlugin(Star):
     def __init__(self, context: Context):
         super().__init__(context)
