@@ -32,9 +32,10 @@ class CrazyThursdayPlugin(Star):
         logger.debug("Timestamp: %s", msg_obj.timestamp)
         logger.debug("============================")
 
-        if "ame" in text.lower():  # 改为检测 ame（不区分大小写）
-            # 直接返回固定响应
-            return event.plain_result("a醋")
+        if "ame" in text.lower():
+        # 将 return 改为 yield
+        yield event.plain_result("a醋")
+        return  # 结束函数执行
 
         # 保留原有疯狂星期四逻辑（如需完全替换可删除此部分）
         if "疯狂星期四" in text:
