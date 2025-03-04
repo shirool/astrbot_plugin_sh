@@ -33,17 +33,6 @@ class CrazyThursdayPlugin(Star):
         logger.debug("============================")
 
         if "ame" in text.lower():
-        # 将 return 改为 yield
-        yield event.plain_result("a醋")
-        return  # 结束函数执行
-
-        # 保留原有疯狂星期四逻辑（如需完全替换可删除此部分）
-        if "疯狂星期四" in text:
-            try:
-                with urllib.request.urlopen("https://vme.im/api?format=text") as resp:
-                    result_bytes = resp.read()
-                    result_text = result_bytes.decode("utf-8", errors="replace")
-            except Exception as e:
-                result_text = f"获取信息失败: {e}"
-
-            yield event.plain_result(result_text)
+            # 确保 yield 和 return 在 if 代码块内缩进
+            yield event.plain_result("a醋")
+            return
